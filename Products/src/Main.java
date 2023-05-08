@@ -1,13 +1,14 @@
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import com.careercamp.dao.ProductDao;
 import com.careercamp.dao.ProductDaoImplement;
 import com.careercamp.dto.Product;
+import com.careercamp.service.InputHelper;
 import com.careercamp.service.ProductNotFoundException;
 
 public class Main {
+	
 	public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ProductDao productDao = new ProductDaoImplement();
@@ -24,28 +25,34 @@ public class Main {
             		+ "8. Display all products by discount\n"
             		+ "9. Exit");
             
-            int choice = 0; 
-            try {
-                choice = scanner.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid Input. Please enter an integer value.");
-                scanner.next();
-                continue;
-            }          
+            
+//            try {
+//                choice = scanner.nextInt();
+//            } catch (InputMismatchException e) {
+//                System.out.println("Invalid Input. Please enter an integer value.");
+//                scanner.next();
+//                continue;
+//            }     
+            
+            int choice = InputHelper.takeValidInput("choice", Integer.class, scanner);
             
 			switch (choice) {
                 case 1:
                     System.out.println("Enter product details:");
                     System.out.print("Name: ");
                     scanner.nextLine();
-                    String name = scanner.nextLine();
+//                    String name = scanner.nextLine();
+                    String name = InputHelper.takeValidInput("Name", String.class, scanner);
                     System.out.print("Price: ");
-                    double price = scanner.nextDouble();
+//                    double price = scanner.nextDouble();
+                    double price = InputHelper.takeValidInput("Price", Double.class, scanner);
                     System.out.print("Quantity: ");
-                    int quantity = scanner.nextInt();
+//                    int quantity = scanner.nextInt();
+                    int quantity = InputHelper.takeValidInput("Quantity", Integer.class, scanner);
                     System.out.print("Discount: ");
-                    double discount = scanner.nextDouble();
-
+//                    double discount = scanner.nextDouble();
+                    double discount = InputHelper.takeValidInput("Discount", Double.class, scanner);;
+                    
                     productDao.addProduct(new Product(name, price, quantity, discount));
                     System.out.println("Product added successfully");
                     break;
@@ -60,7 +67,8 @@ public class Main {
 
                 case 3:
                     System.out.print("Enter product ID to delete: ");
-                    int deleteId = scanner.nextInt();
+//                    int deleteId = scanner.nextInt();
+                    int deleteId = InputHelper.takeValidInput("Product ID", Integer.class, scanner);
                     try {
                         productDao.deleteProductById(deleteId);
                         System.out.println("Product with ID " + deleteId + " deleted successfully");
@@ -71,27 +79,32 @@ public class Main {
 
                 case 4:
                     System.out.print("Enter product ID to update: ");
-                    int updateId = scanner.nextInt();
+//                    int updateId = scanner.nextInt();
+                    int updateId = InputHelper.takeValidInput("Product ID", Integer.class, scanner);
                     try {
                         Product productToUpdate = productDao.getProductById(updateId);
                         System.out.print("Enter new name (leave blank to skip): ");
                         scanner.nextLine();
-                        String newName = scanner.nextLine();
+//                        String newName = scanner.nextLine();
+                        String newName = InputHelper.takeValidInput("New Name", String.class, scanner);
                         if (!newName.isBlank()) {
                             productToUpdate.setProdName(newName);
                         }
                         System.out.print("Enter new price (leave 0 to skip): ");
-                        double newPrice = scanner.nextDouble();
+//                        double newPrice = scanner.nextDouble();
+                        double newPrice = InputHelper.takeValidInput("New Price", Double.class, scanner);
                         if (newPrice != 0) {
                             productToUpdate.setPrice(newPrice);
                         }
                         System.out.print("Enter new quantity (leave 0 to skip): ");
-                        int newQuantity = scanner.nextInt();
+//                        int newQuantity = scanner.nextInt();
+                        int newQuantity = InputHelper.takeValidInput("New Quantity", Integer.class, scanner);
                         if (newQuantity != 0) {
                             productToUpdate.setQuantity(newQuantity);
                         }
                         System.out.print("Enter new discount (leave 0 to skip): ");
-                        double newDiscount = scanner.nextDouble();
+//                        double newDiscount = scanner.nextDouble();
+                        double newDiscount  = InputHelper.takeValidInput("New Discount", Double.class, scanner);
                         if (newDiscount != 0) {
                             productToUpdate.setDiscount(newDiscount);
                         }
@@ -104,7 +117,8 @@ public class Main {
 
                 case 5:
                     System.out.print("Enter product ID to search: ");
-                    int searchId = scanner.nextInt();
+//                    int searchId = scanner.nextInt();
+                    int searchId = InputHelper.takeValidInput("Product ID", Integer.class, scanner);
                     try {
                         Product productById = productDao.getProductById(searchId);
                         System.out.println("Product with ID " + searchId + " found: " + productById.getProdName() + " " + productById.getPrice() + " " + productById.getDiscount()+" ");
@@ -115,7 +129,8 @@ public class Main {
                     
                 case 6:
                 	System.out.println("Enter product name to search: ");
-                	String pname = scanner.nextLine();
+//                	String pname = scanner.nextLine();
+                	String pname = InputHelper.takeValidInput("Product Name", String.class, scanner);
                 	try {
                 		Product p = productDao.getProductByName(pname);
                 		System.out.println("Product with Name " + pname + " found: " + p.getProdName() + " " + p.getPrice() + " " + p.getDiscount()+" ");
